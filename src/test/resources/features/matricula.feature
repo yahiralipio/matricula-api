@@ -1,28 +1,36 @@
-Feature: : Matricula de cursos
-  Como alumno de CIBERTEC
-  Quiero matricularme en mis cursos
-  Para llevarlos en el ciclo
+# language: es
+Característica: Matrícula del alumno
+  Como alumno del Instituto CIBERTEC
+  Quiero cotizar, matricularme y pagar un curso
+  Para completar mi matrícula en el periodo abierto
 
-  Scenario: Matricula valida con descuento por promedio y anulacion
-    Given  que Ana consulta la API de matricula
-    When se matricula con el codigo "i202610001" en el curso "PS3511"
-    Then el codigo de respuesta es 201
-    And el monto de la matricula es 288,0
-    And el estado de la matricula es "REGISTRADA"
-    When anula es matricula
-    Then el codigo de respuesta es 200
-    And el estado de la matricula es "ANULADA"
+  Antecedentes:
+    Dado que el alumno "i202610006" inicia sesión con la clave "Cibertec2026"
 
-  Scenario Outline: Matricula rechazada por <motivo>
-    Given  que Ana consulta la API de matricula
-    When se matricula por codigo "<alumno>" en el curso "<curso>"
-    Then el codigo de respuesta es <status>
-    And el codigo de error es "<codigo>"
-    Examples:
-      | motivo             | alumno     | curso  | status | codigo               |
-      | deuda              | i202610004 | PS5511 | 422    | ALUMNO_CON_DEUDA     |
-      | duplicada          | i202610003 | IA5513 | 409    | MATRICULA_DUPLICADA  |
-      | falta de vacantes  | i202610001 | IA5513 | 409    | SIN_VACANTES         |
-      | cruce de horario   | i202610002 | QA5517 | 409    | CRUCE_HORARIO        |
-      | límite de créditos | i202610005 | TS5514 | 422    | LIMITE_CREDITOS      |
-      | alumno inexistente | i999999999 | PS5511 | 404    | ALUMNO_NO_ENCONTRADO |
+  Escenario: Cotizar el curso DM5512
+    Cuando cotizo el curso "DM5512" para el alumno "i202610006"
+    Entonces el código de respuesta es 200
+    Y la cotización tiene 4 créditos
+    Y el subtotal es "480.0"
+    Y el descuento es "0.0"
+    Y el total es "480.0"
+
+  Escenario: Matricularse y pagar el curso DM5512
+    Cuando matriculo el curso "DM5512" para el alumno "i202610006"
+    Entonces el código de respuesta es 201
+    Y la matrícula queda en estado "REGISTRADA"
+    Y el monto de la matrícula es "480.0"
+    Y la matrícula cumple el esquema "matricula.json"
+    Cuando pago la matrícula con el método "TRANSFERENCIA"
+    Entonces el código de respuesta es 200
+    Y la matrícula queda en estado "PAGADA"
+    Y la fecha de pago tiene valor
+    Cuando consulto los pagos del alumno "i202610006"
+    Entonces existe un pago para la matrícula con método "TRANSFERENCIA"
+    Y el número de operación tiene formato OP-000000
+
+  Escenario: No se puede matricular en QA5517 por prerrequisito pendiente
+    Cuando intento matricular el curso "QA5517" para el alumno "i202610006"
+    Entonces el código de respuesta es 422
+    Y el código de error es "PRERREQUISITO_PENDIENTE"
+    Y la respuesta cumple el esquema "error.json"

@@ -1,20 +1,11 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "required": ["id", "codigoAlumno", "codigoCurso", "periodo", "horario", "creditos", "monto",
-    "estado", "nota", "condicion", "fechaRegistro", "fechaPago"],
   "properties": {
-    "id": { "type": "integer", "minimum": 1 },
-    "codigoAlumno": { "type": "string", "pattern": "^i[0-9]{9}$" },
-    "codigoCurso": { "type": "string", "pattern": "^[A-Z]{2}[0-9]{4}$" },
-    "periodo": { "type": "string", "pattern": "^[0-9]{4}-[12]$" },
-    "horario": { "type": "string" },
-    "creditos": { "type": "integer", "minimum": 1 },
-    "monto": { "type": "number", "minimum": 0 },
-    "estado": { "enum": ["REGISTRADA", "PAGADA", "ANULADA"] },
-    "nota": { "type": ["number", "null"], "minimum": 0, "maximum": 20 },
-    "condicion": { "enum": ["APROBADO", "DESAPROBADO", null] },
-    "fechaRegistro": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T" },
-    "fechaPago": { "type": ["string", "null"], "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T" }
-  }
+    "id": { "type": "integer" },
+    "estado": { "type": "string" },
+    "monto": { "type": "number" },
+    "codigoAlumno": { "type": "string" },
+    "codigoCurso": { "type": "string" }
+  },
+  "required": ["id", "estado", "monto", "codigoAlumno", "codigoCurso"]
 }
