@@ -1,4 +1,4 @@
-package pe.edu.cibertec.matricula_api.screenplay.task;
+package pe.edu.cibertec.matricula_api.screenplay.tasks;
 
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;

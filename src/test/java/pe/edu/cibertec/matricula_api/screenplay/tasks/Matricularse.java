@@ -1,4 +1,4 @@
-package pe.edu.cibertec.matricula_api.screenplay.task;
+package pe.edu.cibertec.matricula_api.screenplay.tasks;
 
 import io.restassured.http.ContentType;
 import net.serenitybdd.annotations.Step;
