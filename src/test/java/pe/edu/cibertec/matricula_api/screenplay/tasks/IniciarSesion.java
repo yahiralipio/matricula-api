@@ -34,7 +34,6 @@ public class IniciarSesion implements Task {
                         .with(request -> request.contentType(ContentType.JSON).body(body))
         );
 
-        // Usamos SerenityRest para verificar el status y guardar los tokens
         if (SerenityRest.lastResponse().statusCode() == 200) {
             actor.remember("accessToken", SerenityRest.lastResponse().jsonPath().getString("accessToken"));
             actor.remember("refreshToken", SerenityRest.lastResponse().jsonPath().getString("refreshToken"));
